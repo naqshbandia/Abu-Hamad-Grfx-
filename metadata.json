@@ -1,0 +1,6 @@
+{
+  "name": "Chak Wood Pro Calculator & Admin",
+  "description": "Professional Chak wood calculator for timber & sawmills with admin panel, custom shop branding, multi-type calculations, blacklist security, and printable invoices.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

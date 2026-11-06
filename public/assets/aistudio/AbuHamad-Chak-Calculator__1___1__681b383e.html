@@ -1,0 +1,638 @@
+ <!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AbuHamad GRFX - Pro Calculator</title>
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22AbuHamad%20GRFX%22,%22short_name%22:%22GRFX%20Calc%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#0f3d2e%22,%22theme_color%22:%22#ffd700%22}">
+
+<style>
+/* 🌙 Pro Islamic/Premium Design */
+body { font-family: 'Segoe UI', Arial; background: radial-gradient(circle, #0f3d2e, #051a12); padding: 5px; color: #fff; min-height: 100vh; margin: 0; }
+.container { max-width: 500px; margin: auto; padding: 10px; }
+.eng-header { text-align: center; font-family: Arial, sans-serif; font-size: 16px; color: #ffd700; margin-bottom: 10px; font-weight: bold; letter-spacing: 1px; }
+
+/* 📑 Compact Tabs */
+.tab-container { display: flex; gap: 3px; margin-bottom: 10px; justify-content: center; }
+.tab-btn { flex: 1; padding: 10px 2px; border: 1px solid #ffd700; background: rgba(0,0,0,0.4); color: #ffd700; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 10px; white-space: nowrap; }
+.tab-btn.active { background: #ffd700; color: #000; box-shadow: 0 0 8px #ffd700; }
+
+/* 📊 Table Styling */
+table { width: 100%; border-collapse: collapse; background: #fff; border: 2px solid #ffd700; border-radius: 5px; color: #000; overflow: hidden; }
+th, td { border: 1px solid #ccc; padding: 6px 2px; text-align: center; font-size: 13px; font-weight: bold; }
+th { background: #000; color: #fff; font-weight: bold; }
+td.size { background-color: #e0f2f1; }
+td.cut { background-color: #ffe0b2; }
+td.rowTotal { background-color: #e8f5e9; }
+input.qty { width: 65px; padding: 8px; text-align: center; border: 3px solid #999; background: #fff; color: #000; font-weight: bold; border-radius: 4px; }
+
+/* UI Elements */
+.hidden { display: none; }
+.main-card { background: rgba(0,0,0,0.5); padding: 25px; border-radius: 20px; border: 2px solid #ffd700; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.reg-input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; text-align: center; color: #000; }
+.btn-submit { background: linear-gradient(to bottom, #ffd700, #b8860b); color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 18px; }
+
+/* ٹاپ ویلکم لائن کا ڈیزائن */
+.user-welcome-bar {
+    background: linear-gradient(90deg, #ffd700, #b8860b);
+    color: #000;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    display: none;
+    border: 2px solid #fff;
+}
+
+.reset-box { border: 2px solid #ffd700; border-radius: 10px; padding: 10px; cursor: pointer; margin-top: 20px; display: block; text-decoration: none; text-align: center; }
+.reset-text { color: #ffd700; font-size: 14px; font-weight: bold; } 
+.action-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
+
+.action-btn{
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    color:#fff;
+}
+
+.save-btn{background:#009688;}
+.new-btn{background:#ff9800;}
+.list-btn{background:#1565c0;}
+.pdf-btn{background:#8e24aa;}
+ 
+
+.footer-text { margin-top: 15px; font-size: 12px; color: #aaa; text-align: center; }
+.wa-footer-link { color: #00ffcc; text-decoration: none; font-weight: bold; display: block; margin-top: 5px; }
+</style>
+</head>
+<body onload="checkStatus()">
+
+<div class="container">
+
+    <div id="userWelcome" class="user-welcome-bar"></div>
+
+    <div id="regArea" class="main-card hidden">
+        <div style="background: rgba(0,0,0,0.3); border: 2px solid #ffd700; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center;">
+            <p style="color: #fff; font-size: 15px; margin-bottom: 12px; font-weight: 500;">
+               محترم و مکرم! اس کیلکولیٹر کو مستقل استعمال کرنے کے لیے فیس ادا کرنا لازمی ہے۔
+لاگ اِن کیلیے نیٹ ضروری ہے بعد میں آف لائین استعمال کردیں۔
+  
+             
+            </p>
+            <div style="font-size: 18px; font-weight: bold; color: #ffd700; margin-bottom: 10px;">
+                 رجسٹریشن فیس: <span style="color: #00ffcc;">500 روپے</span>
+            </div>
+            <div style="background: #ffd700; color: #000; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 13px; margin-bottom: 5px;">
+                🎊 خوشخبری: خصوصی ڈسکاؤنٹ آفر! 🎊
+            </div>
+            <div style="border: 1px dashed #ffd700; padding: 6px; border-radius: 8px; margin-bottom: 6px;">
+                <p style="margin: 0; font-size: 10.5px; color: #fff;">
+                    اگر آپ <span style="color: #00ffcc; font-weight: bold;">دو دوست</span> مل کر یا <span style="color: #00ffcc; font-weight: bold;">دو موبائل پر</span> رجسٹر کرواتے ہیں
+                </p>
+                <p style="margin: 3px 0 0 0; font-size: 13px; font-weight: bold; color: #fff;">
+                    تو دونوں کی مجموعی فیس صرف <span style="background: #00ffcc; color: #000; padding: 0 2px; border-radius: 2px;">850 روپے</span> ہوگی
+                </p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">
+                <p style="color: #00ffcc; font-weight: bold; margin: 0; font-size: 16px;">easypaisa No</p>
+                <p style="margin: 2px 0; font-size: 18px; font-weight: bold; color: #fff;">نمبر: 03329106002</p>
+                <p style="margin: 0; font-size: 15px; color: #ffd700;">نام: Qudrat Ullah Khan</p>
+            </div>
+        </div>
+
+        <form id="regForm" action="https://formsubmit.co/mirakhel2021@gmail.com" method="POST" target="hidden_iframe" onsubmit="saveAndProceed(event)">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="New Calculator Registration">
+            
+            <input type="text" name="Name" id="uName" class="reg-input" placeholder="اپنا نام لکھیں" required>
+            <input type="number" name="Mobile" id="uMobile" class="reg-input" placeholder="موبائل نمبر درج کریں" required>
+            <input type="hidden" name="DeviceID" id="uDeviceHidden">
+            
+            <button type="submit" class="btn-submit">فارم رجسٹر کریں اور فیس جمع کریں</button>
+        </form>
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
+    </div>
+
+    <div id="lockArea" class="main-card hidden">
+        <h2 style="text-align: center; color: #ffd700; font-size: 28px;">سیکیورٹی لاک</h2>
+        <p style="text-align: center; font-size: 13px; color: #ccc;">محترم کسٹمر! اپنا کوپن کوڈ درج کریں</p>
+        <input type="password" id="otpInput" class="reg-input" placeholder="Coupon Code" style="background: #f0f0f0; letter-spacing: 5px; font-size: 22px;">
+        <button onclick="unlockApp()" class="btn-submit">ان لاک کریں</button>
+        <p style="text-align: center; margin-top: 15px;">
+            <a id="waLink" href="#" style="color: #00ffcc; text-decoration: none; font-weight: bold;">📱 واٹس ایپ سے کوڈ حاصل کریں</a>
+        </p>
+        <a href="#" class="reset-box" onclick="resetRegistration()">
+            <div class="reset-text">دوبارہ رجسٹریشن کریں</div>
+        </a>
+    </div>
+
+    <div id="calcArea" class="hidden">
+ <!-- Professional Header -->
+<div id="proHeader" style="background:linear-gradient(135deg,#ffd700,#b8860b);color:#000;padding:12px;border-radius:12px;margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.35);">
+
+<div style="margin-bottom:10px;">
+
+<input
+id="customerName"
+type="text"
+placeholder="👤 کسٹمر کا نام"
+
+style="width:90%;
+padding:11px;
+font-size:16px;
+border-radius:10px;
+margin-bottom:6px;"
+
+oninput="updateCustomerHeader()">
+
+<input
+id="customerPhone"
+type="tel"
+placeholder="📱 کسٹمر موبائل"
+
+style="width:90%;
+padding:11px;
+font-size:14px;
+border-radius:6px;"
+
+oninput="updateCustomerHeader()">
+</div>
+
+<hr style="border:0;border-top:1px solid rgba(0,0,0,.3);">
+<span id="headerName"
+style="
+font-size:14px;
+font-weight:900;
+letter-spacing:.6px;
+">
+👤 کسٹمر کا نام
+</span>
+
+<span id="headerPhone"
+style="
+font-size:14px;
+font-weight:bold;
+">
+📱 موبائل نمبر
+</span>
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-top:8px;
+margin-bottom:8px;
+">
+<span id="headerDate">📅 --</span>
+<span id="headerTime">🕒 --</span>
+</div>
+
+<div style="text-align:center;font-weight:bold;margin-top:6px;font-size:18px;">
+Bill No :
+<span id="billNo">000001</span>
+</div>
+
+</div>
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab(0, this)">ناڑی چک</button>
+            <button class="tab-btn" onclick="switchTab(1, this)">کانا چک</button>
+            <button class="tab-btn" onclick="switchTab(2, this)">پشاوری چک</button>
+            <button class="tab-btn" onclick="switchTab(3, this)">لکی مروت</button>
+        </div>
+        <table id="calcTable">
+            <thead>
+                <tr><th>سائز</th><th>کٹنگ</th><th>تعداد</th><th>فٹواری</th><th>سینکڑے</th></tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+            <tfoot>
+                <tr style="background: #333; color: #fff;"><td colspan="3">ٹوٹل</td><td id="grandTotal">0</td><td id="grandHundred">0</td></tr>
+            </tfoot>
+        </table>
+        <div style="margin-top:10px; background:rgba(0,0,0,0.4); padding:10px; border-radius:10px; border:1px solid #ffd700;">
+            <table style="background:none; border:none; color: #fff; width: 100%;">
+                <tr style="border:none;">
+                    <td style="border:none; text-align: left;">فٹواری ریٹ</td>
+                    <td style="border:none;"><input type="number" id="rateFotwari" oninput="calculate()" style="width: 80px;"></td>
+                    <td id="fotwariResult" style="border:none; color:#00ffcc; font-weight:bold; font-size:18px;">0</td>
+                </tr>
+                <tr style="border:none;">
+                    <td style="border:none; text-align: left;">سینکڑے ریٹ</td>
+                    <td style="border:none;"><input type="number" id="rateHundred" oninput="calculate()" style="width: 80px;"></td>
+                    <td id="hundredResult" style="border:none; color:#00ffcc; font-weight:bold; font-size:18px;">0</td>
+                </tr>
+            </table>
+        </div> 
+
+<div class="action-buttons">
+
+<button onclick="saveBill()" class="action-btn save-btn">
+💾 بل محفوظ کریں
+</button>
+
+<button class="action-btn new-btn" onclick="newCalculation()">
+🆕 نیا حساب
+</button>
+
+<button class="action-btn list-btn" onclick="showSavedBills()">
+📂 محفوظ شدہ بل
+</button>
+
+<button class="action-btn pdf-btn" onclick="savePDF()">
+📄 PDF بل
+</button>
+
+</div>
+<div id="savedBillsArea"
+style="
+display:none;
+margin-top:15px;
+background:#fff;
+color:#000;
+border-radius:10px;
+padding:10px;
+">
+
+<h3 style="text-align:center;">
+📂 محفوظ شدہ بل
+</h3>
+
+<div id="savedBillsList">
+
+کوئی بل محفوظ نہیں۔
+
+</div>
+
+</div>
+
+    </div>
+     <!-- فوٹر واٹس ایپ لنک کے ساتھ -->
+    <div class="footer-text">
+        Powered by AbuHamad-GRFX-Designer
+        <a class="wa-footer-link" href="https://wa.me/923329106002?text=محترم قدرت اللہ بھائی! مجھے کیلکولیٹر کے بارے میں رہنمائی / مشورہ چاہیے">
+            💬 رہنمائی یا مشورہ کے لیے واٹس ایپ کریں:03329106002
+        </a>
+    </div>
+</div>
+
+<script>
+let activeTab = 0;
+
+// 🚫 بلاک لسٹ: یہاں ان لوگوں کے نمبر یا ڈیوائس آئی ڈی لکھیں جنہیں بلاک کرنا ہے
+const BLACKLIST = ["033","0"]; 
+const _0xM = ["03329106002","923329106002","QUDRAT786","786050"];
+const _0xK = () => parseInt([0x35,0x30,0x35,0x30].map(c=>String.fromCharCode(c)).join(''), 10); 
+
+function getDeviceId() {
+    const info = navigator.userAgent + screen.width + screen.height;
+    let hash = 0;
+    for (let i = 0; i < info.length; i++) {
+        hash = ((hash << 5) - hash) + info.charCodeAt(i);
+        hash |= 0; 
+    }
+    return Math.abs(hash).toString().slice(-4);
+}
+
+// بلاک چیک کرنے کا فنکشن
+function isBlocked() {
+    let p = localStorage.getItem("userPhone");
+    let d = getDeviceId();
+    return BLACKLIST.includes(p) || BLACKLIST.includes(d);
+}
+
+const configs = [
+    { name: "ناڑی چک", data: [[18,10],[17,10],[16,10],[15,10],[14,10],[13,10],[12,10],[11,10],[10,10],[9,20],[8,20],[7,20],[6,20],[5,20]] },
+    { name: "کانا چک", data: [[18,10],[17,10],[16,12],[15,12],[14,15],[13,20],[12,25],[11,25],[10,25],[9,25],[8,25],[7,25],[6,25],[5,25]] },
+    { name: "پشاوری چک", data: [[18,20],[17,20],[16,20],[15,20],[14,20],[13,20],[12,20],[11,20],[10,20],[9,20],[8,20],[7,20],[6,20],[5,20]] },
+    { name: "لکی مروت ", data: [[18,10],[17,10],[16,12],[15,12],[14,15],[13,20],[12,25],[11,25],[10,25],[9,25],[8,25],[7,25],[6,25],[5,25]] },
+];
+
+function checkStatus() {
+    // ⚠️ بلاک میسج اور سسٹم
+    if (isBlocked()) {
+        localStorage.clear(); 
+        document.body.innerHTML = `
+            <div style="padding: 40px 20px; text-align: center; background: #051a12; color: #fff; height: 100vh; display: flex; flex-direction: column; justify-content: center; font-family: 'Segoe UI', Arial; border: 4px solid #ff4444;">
+                <div style="font-size: 70px; margin-bottom: 20px;">🚫</div>
+                <h1 style="color: #ff4444; font-size: 28px;">آپ کا اکاؤنٹ بلاک ہے!</h1>
+                <p style="font-size: 16px; line-height: 1.6; color: #ccc; margin-top: 15px;">
+                    محترم کسٹمر! آپ کی رجسٹریشن فیس جمع نہ ہونے کی وجہ سے آپ کی رسائی ختم کر دی گئی ہے۔
+                </p>
+                <div style="background: #ffd700; color: #000; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 30px; font-size: 18px; box-shadow: 0 0 15px #ffd700;">
+                    رابطہ برائے بحالی: 03329106002
+                </div>
+            </div>`;
+        return;
+    }
+
+    let status = localStorage.getItem("appStatus");
+    let name = localStorage.getItem("uName");
+    let phone = localStorage.getItem("userPhone");
+    let welcomeBar = document.getElementById("userWelcome");
+
+    if (status === "unlocked") {
+        showSection("calcArea");
+        updateHeader();
+        loadCalculatorData();
+        if(name && phone) {
+            welcomeBar.innerHTML = `✅ رجسٹرڈ ممبر: ${name} (${phone})`;
+            welcomeBar.style.display = "block";
+        }
+    }
+    else if (status === "pending_otp") {
+        showSection("lockArea");
+        setupWA();
+        welcomeBar.style.display = "none";
+    }
+    else { 
+        showSection("regArea"); 
+        document.getElementById("uDeviceHidden").value = getDeviceId();
+        welcomeBar.style.display = "none";
+    }
+}
+
+function saveAndProceed(e) {
+    localStorage.setItem("userPhone", document.getElementById("uMobile").value);
+    localStorage.setItem("uName", document.getElementById("uName").value);
+    localStorage.setItem("appStatus", "pending_otp");
+    document.getElementById("uDeviceHidden").value = getDeviceId();
+    showSection("lockArea");
+    setupWA();
+}
+
+function switchTab(index, btn) {
+    activeTab = index;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    initTable(index);
+}
+
+function initTable(index) {
+    const config = configs[index];
+    let tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+    config.data.forEach(item => {
+        tbody.innerHTML += `<tr><td class="size">${item[0]}</td><td class="cut">${item[1]}</td><td><input type="number" class="qty" oninput="calculate()"></td><td class="rowTotal">0</td><td class="hundred">0</td></tr>`;
+    });
+    calculate();
+}
+
+/* ========= AUTO SAVE SYSTEM ========= */
+
+function saveCalculatorData(){
+
+    const data = {
+        activeTab: activeTab,
+        qty: [],
+        rateFotwari: document.getElementById("rateFotwari").value,
+        rateHundred: document.getElementById("rateHundred").value
+    };
+
+    document.querySelectorAll(".qty").forEach(input=>{
+        data.qty.push(input.value);
+    });
+
+    localStorage.setItem("calculatorData",JSON.stringify(data));
+
+}
+
+function loadCalculatorData(){
+
+    const saved = localStorage.getItem("calculatorData");
+
+    if(!saved) return;
+
+    const data = JSON.parse(saved);
+
+    activeTab = data.activeTab || 0;
+
+    initTable(activeTab);
+
+    setTimeout(()=>{
+
+        document.querySelectorAll(".qty").forEach((input,index)=>{
+
+            if(data.qty[index]!==undefined){
+
+                input.value=data.qty[index];
+
+            }
+
+        });
+
+        document.getElementById("rateFotwari").value=data.rateFotwari || "";
+
+        document.getElementById("rateHundred").value=data.rateHundred || "";
+
+        calculate();
+
+    },50);
+
+}
+
+function calculate() {
+    let gt = 0;
+    document.querySelectorAll("#tableBody tr").forEach(row => {
+        let s = parseFloat(row.children[0].innerText), c = parseFloat(row.children[1].innerText), q = parseFloat(row.querySelector(".qty").value) || 0;
+        let r = s * c * q;
+        row.querySelector(".rowTotal").innerText = r;
+        row.querySelector(".hundred").innerText = (r/100).toFixed(2);
+        gt += r;
+    });
+    document.getElementById("grandTotal").innerText = gt;
+    document.getElementById("grandHundred").innerText = (gt/100).toFixed(2);
+    
+    let rf = parseFloat(document.getElementById("rateFotwari").value) || 0;
+    let rh = parseFloat(document.getElementById("rateHundred").value) || 0;
+    document.getElementById("fotwariResult").innerText = (gt * rf).toFixed(2);
+    document.getElementById("hundredResult").innerText = ((gt/100) * rh).toFixed(2);
+    saveCalculatorData();
+}
+
+function safeLock() {
+    if (confirm("کیا آپ واقعی لاک کرنا چاہتے ہیں؟")) {
+        localStorage.setItem("appStatus", "pending_otp");
+        location.reload();
+    }
+}
+
+function resetRegistration() {
+    if (confirm("کیا آپ واقعی رجسٹریشن ری سیٹ کرنا چاہتے ہیں؟")) {
+        localStorage.clear();
+        location.reload();
+    }
+}
+
+function setupWA() {
+    let p = localStorage.getItem("userPhone");
+    let n = localStorage.getItem("uName");
+    let d = getDeviceId();
+    let msg = `محترم قدرت اللہ! میں نے رجسٹریشن کر لی ہے۔%0Aنام: ${n}%0Aنمبر: ${p}%0Aڈیوائس آئی ڈی: ${d}%0Aبراہ کرم میرا کوڈ بھیج دیں۔`;
+    document.getElementById("waLink").href = "https://wa.me/923329106002?text=" + msg;
+}
+
+function unlockApp() {
+    // بلاک چیک
+    if (isBlocked()) {
+        alert("آپ کا اکاؤنٹ بلاک ہے۔ براہ کرم رابطہ کریں۔");
+        return;
+    }
+
+    let p = localStorage.getItem("userPhone");
+    let d = getDeviceId();
+    let inputOtp = document.getElementById("otpInput").value.trim();
+    if(!p) { resetRegistration(); return; }
+    
+    // Master bypass check
+    if (_0xM.includes(inputOtp)) {
+        localStorage.setItem("appStatus", "unlocked");
+        checkStatus();
+        return;
+    }
+
+    let lastFour = (p || "").slice(-4);
+    let valid = (parseInt(lastFour, 10) || 0) + (parseInt(d, 10) || 0) + _0xK();
+    
+    if (inputOtp === String(valid)) {
+        localStorage.setItem("appStatus", "unlocked");
+        checkStatus();
+    } else { 
+        alert("غلط کوڈ! براہ کرم درست کوڈ حاصل کریں۔"); 
+    }
+}
+
+function showSection(id) {
+    ["regArea", "lockArea", "calcArea"].forEach(a => document.getElementById(a).classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+}
+function updateHeader(){
+
+const n=localStorage.getItem("uName")||"---";
+const p=localStorage.getItem("userPhone")||"---";
+
+document.getElementById("headerName").innerHTML="👤 "+n;
+document.getElementById("headerPhone").innerHTML="📱 "+p;
+
+const d=new Date();
+
+document.getElementById("headerDate").innerHTML="📅 "+d.toLocaleDateString();
+
+document.getElementById("headerTime").innerHTML="🕒 "+d.toLocaleTimeString();
+
+let bill=localStorage.getItem("billCounter");
+
+if(!bill){
+
+bill=1;
+
+localStorage.setItem("billCounter",1);
+
+}
+
+document.getElementById("billNo").innerText=String(bill).padStart(6,"0");
+
+}
+function updateCustomerHeader(){
+
+let n=document.getElementById("customerName").value;
+
+let p=document.getElementById("customerPhone").value;
+
+document.getElementById("headerName").innerHTML =
+"👤 " + (n || "کسٹمر کا نام");
+
+document.getElementById("headerPhone").innerHTML =
+"📱 " + (p || "موبائل نمبر");
+
+}
+// =========================
+// STEP 3B - SAVE BILL
+// =========================
+
+function saveBill() {
+
+    let bills = JSON.parse(localStorage.getItem("savedBills") || "[]");
+
+    let bill = {
+        billNo: document.getElementById("billNo")?.innerText || "",
+        customer: document.getElementById("customerName")?.value || "",
+        mobile: document.getElementById("customerPhone")?.value || "",
+        date: document.getElementById("headerDate")?.innerText || "",
+        time: document.getElementById("headerTime")?.innerText || "",
+        tab: configs[activeTab].name,
+        total: document.getElementById("grandTotal").innerText,
+        hundred: document.getElementById("grandHundred").innerText,
+        fotwariRate: document.getElementById("rateFotwari").value,
+        hundredRate: document.getElementById("rateHundred").value,
+        fotwariAmount: document.getElementById("fotwariResult").innerText,
+        hundredAmount: document.getElementById("hundredResult").innerText
+    };
+
+    bills.push(bill);
+
+    localStorage.setItem("savedBills", JSON.stringify(bills));
+
+    alert("✅ بل کامیابی سے محفوظ ہوگیا۔");
+}
+function showSavedBills(){
+
+let bills=JSON.parse(localStorage.getItem("savedBills")||"[]");
+
+let html="";
+
+if(bills.length==0){
+
+html="<h3 style='text-align:center;color:red;'>کوئی بل محفوظ نہیں</h3>";
+
+}else{
+
+bills.forEach((bill,index)=>{
+
+html+=`
+
+<div style="
+border:1px solid #999;
+padding:10px;
+margin-bottom:10px;
+border-radius:8px;
+">
+
+<b>بل نمبر:</b> ${bill.billNo}<br>
+
+<b>کسٹمر:</b> ${bill.customer}<br>
+
+<b>موبائل:</b> ${bill.mobile}<br>
+
+<b>کل رقم:</b> ${bill.total}<br>
+
+<button onclick="alert('یہ اگلے مرحلے میں کھلے گا')">
+
+👁️ دیکھیں
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.getElementById("savedBillsArea").style.display="block";
+
+document.getElementById("savedBillsList").innerHTML=html;
+
+}
+</script>
+</body>
+             </html>
