@@ -384,10 +384,10 @@ export default function App() {
     const validPins = [
       ...adminSettings.adminPins,
       '786050',
-      '786ز50',
+  
       '786Z50',
       'QUDRAT786',
-      '03329106002',
+      
     ].map((p) => normalizeDigits(p).trim().toUpperCase());
 
     if (validPins.includes(normalized) || validPins.includes(pin.trim().toUpperCase())) {
